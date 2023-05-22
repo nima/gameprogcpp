@@ -1,13 +1,3 @@
-*.db
-*.user
-*.opendb
-Debug/
-Release/
+*.o
+*.dSYM/
 .DS_Store
-*xcuserdatad*
-*.xccheckout
-*.stackdump
-.vs
-Chapter14/Assets/Saved.gplevel
-Chapter14/Assets/*.bin
-External/FMOD

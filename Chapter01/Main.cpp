@@ -6,14 +6,10 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
-#include "Game.h"
+#include "Game.hpp"
 
 int main(int argc, char** argv) {
 	Game game;
-	bool success = game.Initialize();
-	if (success) {
-		game.RunLoop();
-	}
-	game.Shutdown();
+	game.Initialize() ? game.RunLoop() : game.Shutdown();
 	return 0;
 }

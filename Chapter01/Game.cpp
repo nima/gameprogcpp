@@ -8,16 +8,16 @@
 
 #include <math.h>
 
-#include "Game.h"
+#include "Game.hpp"
 
-const int thickness = 15;
 const float paddleH = 100.0f;
+const float paddleW = 20.0f;
 
 Game::Game():
-    mWindow(nullptr),
-    mRenderer(nullptr),
     mTicksCount(0),
     mIsRunning(true),
+	mWindow(nullptr),
+	mRenderer(nullptr),
 	winWidth(1200),
 	winHeight(800)
 {}
@@ -43,30 +43,52 @@ bool Game::Initialize() {
 		return false;
 	}
 	
-	paddles = {
-		Paddle{
-			Vector2{10.0f, winWidth/2.0f},
-			0,
-			SDL_SCANCODE_W, SDL_SCANCODE_S,
-			20, 25,
-		},
-		Paddle{
-			Vector2{winWidth - (10.0f + thickness), winHeight - winWidth/2.0f},
-			0,
-			SDL_SCANCODE_I, SDL_SCANCODE_K,
-			-25, -20,
-		}
-	};
+	this->registry = new Registry();
+	this->registry->Register(new InputSystem());
+	this->registry->Register(new VelocitySystem());
+	this->registry->Register(new CollisionSystem());
+	this->registry->Register(new RenderSystem(mRenderer));
 
-	balls = {
-		Ball{ Vector2{winHeight/2.0f, winWidth/2.0f}, Vector2{-200.0f, 235.0f}},
-		Ball{ Vector2{winWidth - winHeight/2.0f, winHeight - winWidth/2.0f}, Vector2{100.0f, 20.0f}},
-	};
+	Entity *entity;
+	tBoundary screenBoundary = {0, 0, winWidth, winHeight};
+	tBoundary lPaddleBoundary = {10, 20, 50, winHeight-20};
+	tBoundary rPaddleBoundary = {winWidth-50, 20, winWidth-10, winHeight-20};
 
+	// Left Paddle
+	entity = new Entity(this);
+	entity->AddComponent(new ControllerComponent(entity, 10.0f, tController{SDL_SCANCODE_W, SDL_SCANCODE_S}));
+	entity->AddComponent(new PositionComponent(entity, tPosition{10.0f+paddleW/2.0f, winWidth/2.0f}, lPaddleBoundary));
+	entity->AddComponent(new ShapeComponent(entity, tDimensions{paddleW, paddleH}));
+	entity->AddComponent(new PhysicsComponent(entity, tCollisionZoneX{20.0f, 25.0f}));
+	this->registry->Register(entity);
+
+	// Right Paddle
+	entity = new Entity(this);
+	entity->AddComponent(new ControllerComponent(entity, 10.0f, tController{SDL_SCANCODE_I, SDL_SCANCODE_K}));
+	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth - (10.0f + paddleW/2.0f), winHeight - winWidth/2.0f}, rPaddleBoundary));
+	entity->AddComponent(new ShapeComponent(entity, tDimensions{paddleW, paddleH}));
+	entity->AddComponent(new PhysicsComponent(entity, tCollisionZoneX{-25, -20}));
+	this->registry->Register(entity);
+
+	// Ball #1
+	entity = new Entity(this);
+	entity->AddComponent(new PositionComponent(entity, tPosition{winHeight/2.0f, winWidth/2.0f}, screenBoundary));
+	entity->AddComponent(new ShapeComponent(entity, tDimensions{15.0, 15.0}));
+	entity->AddComponent(new MobileComponent(entity, tVelocity{-200.0f, 235.0f}));
+	this->registry->Register(entity);
+
+	// Ball #1
+	entity = new Entity(this);
+	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth - winHeight/2.0f, winHeight - winWidth/2.0f}, screenBoundary));
+	entity->AddComponent(new ShapeComponent(entity, tDimensions{15.0, 15.0}));
+	entity->AddComponent(new MobileComponent(entity, tVelocity{100.0f, 20.0f}));
+	this->registry->Register(entity);
+	
+	const int thickness = 10;
 	tWall = SDL_Rect{0, 0, winWidth, thickness};
 	bWall = SDL_Rect{0, winHeight-thickness, winWidth, thickness};
 	net = SDL_Rect{static_cast<int>(winWidth - thickness)/2, 0, thickness, winHeight};
-
+	
 	return true;
 }
 
@@ -96,13 +118,8 @@ void Game::ProcessInput() {
 	if (state[SDL_SCANCODE_ESCAPE]) {
 		mIsRunning = false;
 	}
-	
-	for (auto &paddle: paddles) {
-		// Update left paddle direction based on user key-presses
-		paddle.dir = 0;
-		if (state[paddle.kUp]) paddle.dir -= 1;
-		if (state[paddle.kDown]) paddle.dir += 1;
-	}
+
+	this->registry->ProcessInput(state);
 }
 
 void Game::UpdateGame() {
@@ -111,11 +128,13 @@ void Game::UpdateGame() {
 
 	// Delta time is the difference in ticks from last frame (converted to seconds)
 	// Clamp maximum delta time value to 0.05
-	float deltaTime = fmin(0.05f, (SDL_GetTicks() - mTicksCount) / 1000.0f);
+	float dt = fmin(0.05f, (SDL_GetTicks() - mTicksCount) / 1000.0f);
 
 	// Update tick counts (for next frame)
 	mTicksCount = SDL_GetTicks();
-	
+
+	this->registry->UpdateGame(dt);
+	/*
 	// Update paddle position based on direction
 	for (auto &paddle: paddles) {
 		if (paddle.dir == 0) continue;
@@ -129,44 +148,7 @@ void Game::UpdateGame() {
 		} else if (paddle.pos.y > (winHeight - paddleH/2.0f - thickness)) {
 			paddle.pos.y = winHeight - paddleH/2.0f - thickness;
 		}
-	}
-
-	// Update ball position based on ball velocity
-	for (auto &ball: balls) {
-		ball.pos.x += ball.vel.x * deltaTime;
-		ball.pos.y += ball.vel.y * deltaTime;
-	
-		// Bounce if needed
-		for (const auto &paddle: paddles) {
-			float diff = fabs(paddle.pos.y - ball.pos.y);
-			float x1 = paddle.colXMin;
-			float x2 = paddle.colXMax;
-			if (x1 < 0) x1 += winWidth;
-			if (x2 < 0) x2 += winWidth;
-			
-			if (diff >= paddleH / 2.0f) continue;
-			
-			const bool opIsLessThan = ball.pos.x < winWidth/2;
-			if (ball.pos.x >= x1 && ball.pos.x <= x2 && (opIsLessThan ? (ball.vel.x < 0.0f) : (ball.vel.x > 0.0f))) {
-				// Did we intersect with the paddle?
-				// Our y-difference is small enough
-				// We are in the correct x-position
-				// The ball is moving to the left
-				ball.vel.x *= -1.0f;
-			} else if (ball.pos.x <= 0.0f || ball.pos.x >= winWidth) {
-				// Did the ball go off the screen? (if so, end game)
-				mIsRunning = false;
-			}
-		}
-	
-		if (ball.pos.y <= thickness && ball.vel.y < 0.0f) {
-			// Did the ball collide with the top wall?
-			ball.vel.y *= -1;
-		} else if (ball.pos.y >= (winHeight - thickness) && ball.vel.y > 0.0f) {
-			// Did the ball collide with the bottom wall?
-			ball.vel.y *= -1;
-		}
-	}
+	}*/
 }
 
 void Game::GenerateOutput() {
@@ -183,7 +165,9 @@ void Game::GenerateOutput() {
 	SDL_RenderFillRect(mRenderer, &tWall);
 	SDL_RenderFillRect(mRenderer, &bWall);
 	SDL_RenderFillRect(mRenderer, &net);
-	
+
+	this->registry->GenerateOutput();
+	/*
 	// Draw paddle
 	SDL_Rect lPaddle{
 		static_cast<int>(paddles[0].pos.x),
@@ -211,6 +195,7 @@ void Game::GenerateOutput() {
 		};
 		SDL_RenderFillRect(mRenderer, &ballRect);
 	}
+	*/
 	
 	// Swap front buffer and back buffer
 	SDL_RenderPresent(mRenderer);
