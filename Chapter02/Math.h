@@ -153,10 +153,7 @@ class Vector2 {
 // 3D Vector
 class Vector3 {
   public:
-	float x;
-	float y;
-	float z;
-
+	float x, y, z;
 	Vector3() : x(0.0f), y(0.0f), z(0.0f) {}
 
 	explicit Vector3(float inX, float inY, float inZ) : x(inX), y(inY), z(inZ) {}

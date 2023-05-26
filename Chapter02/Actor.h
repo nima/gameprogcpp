@@ -23,6 +23,8 @@ class Actor {
 	// Any actor-specific update code (overridable)
 	virtual void UpdateActor(float deltaTime);
 
+	virtual bool IsMoving();
+	
 	// Getters/setters
 	const Vector2 &GetPosition() const { return mPosition; }
 	void SetPosition(const Vector2 &pos) { mPosition = pos; }

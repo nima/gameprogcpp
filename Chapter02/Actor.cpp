@@ -24,6 +24,10 @@ Actor::~Actor() {
 	}
 }
 
+bool Actor::IsMoving() {
+	return false;
+}
+
 void Actor::Update(float deltaTime) {
 	if (mState == EActive) {
 		UpdateComponents(deltaTime);

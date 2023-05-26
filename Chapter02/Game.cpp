@@ -76,8 +76,7 @@ void Game::ProcessInput() {
 void Game::UpdateGame() {
 	// Compute delta time
 	// Wait until 16ms has elapsed since last frame
-	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
-		;
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16));
 
 	float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
 	if (deltaTime > 0.05f) {

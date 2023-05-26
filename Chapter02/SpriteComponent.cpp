@@ -27,7 +27,8 @@ void SpriteComponent::Draw(SDL_Renderer *renderer) {
 		r.x = static_cast<int>(mOwner->GetPosition().x - r.w / 2);
 		r.y = static_cast<int>(mOwner->GetPosition().y - r.h / 2);
 
-		// Draw (have to convert angle from radians to degrees, and clockwise to counter)
+		// Draw (have to convert angle from radians to degrees, and clockwise to
+		// counter)
 		SDL_RenderCopyEx(renderer, mTexture, nullptr, &r, -Math::ToDegrees(mOwner->GetRotation()), nullptr,
 						 SDL_FLIP_NONE);
 	}

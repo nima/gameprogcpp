@@ -8,6 +8,8 @@
 
 #pragma once
 #include "Actor.h"
+#include "AnimSpriteComponent.h"
+
 class Ship : public Actor {
   public:
 	Ship(class Game *game);
@@ -16,7 +18,11 @@ class Ship : public Actor {
 	float GetRightSpeed() const { return mRightSpeed; }
 	float GetDownSpeed() const { return mDownSpeed; }
 
+	bool IsMoving() override;
+
   private:
+	AnimSpriteComponent *asc;
 	float mRightSpeed;
 	float mDownSpeed;
+	bool mKeyPressed;
 };
