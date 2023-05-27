@@ -14,6 +14,9 @@ Component::Component(Actor *owner, int updateOrder) : mOwner(owner), mUpdateOrde
 	mOwner->AddComponent(this);
 }
 
-Component::~Component() { mOwner->RemoveComponent(this); }
+Component::~Component() {
+	mOwner->RemoveComponent(this);
+}
 
-void Component::Update(float deltaTime) {}
+void Component::Update(float deltaTime) {
+}

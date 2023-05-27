@@ -15,7 +15,9 @@ SpriteComponent::SpriteComponent(Actor *owner, int drawOrder)
 	mOwner->GetGame()->AddSprite(this);
 }
 
-SpriteComponent::~SpriteComponent() { mOwner->GetGame()->RemoveSprite(this); }
+SpriteComponent::~SpriteComponent() {
+	mOwner->GetGame()->RemoveSprite(this);
+}
 
 void SpriteComponent::Draw(SDL_Renderer *renderer) {
 	if (mTexture) {
@@ -29,8 +31,9 @@ void SpriteComponent::Draw(SDL_Renderer *renderer) {
 
 		// Draw (have to convert angle from radians to degrees, and clockwise to
 		// counter)
-		SDL_RenderCopyEx(renderer, mTexture, nullptr, &r, -Math::ToDegrees(mOwner->GetRotation()), nullptr,
-						 SDL_FLIP_NONE);
+		SDL_RenderCopyEx(
+			renderer, mTexture, nullptr, &r, -Math::ToDegrees(mOwner->GetRotation()), nullptr, SDL_FLIP_NONE
+		);
 	}
 }
 

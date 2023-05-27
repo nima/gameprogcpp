@@ -5,8 +5,8 @@
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
-
 #pragma once
+
 class Component {
   public:
 	// Constructor
@@ -17,7 +17,9 @@ class Component {
 	// Update this component by delta time
 	virtual void Update(float deltaTime);
 
-	int GetUpdateOrder() const { return mUpdateOrder; }
+	int GetUpdateOrder() const {
+		return mUpdateOrder;
+	}
 
   protected:
 	// Owning actor

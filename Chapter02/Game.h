@@ -5,12 +5,13 @@
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
-
 #pragma once
-#include "SDL/SDL.h"
+
 #include <string>
 #include <unordered_map>
 #include <vector>
+
+#include <SDL2/SDL.h>
 
 class Game {
   public:

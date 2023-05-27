@@ -5,28 +5,41 @@
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
-
 #pragma once
-#include "SpriteComponent.h"
-#include <vector>
+
 #include <initializer_list>
+#include <vector>
+
+#include "SpriteComponent.h"
+
+struct tAsset {
+	std::vector<SDL_Texture *> textures;
+	float speed;
+	bool loop;
+	bool inactiveWithoutKeyPress;
+};
+
 class AnimSpriteComponent : public SpriteComponent {
   public:
 	AnimSpriteComponent(class Actor *owner, int drawOrder = 100);
 	// Update animation every frame (overridden from component)
 	void Update(float deltaTime) override;
 	// Set the textures used for animation
-	void SetAnimTextures(const std::initializer_list<std::vector<SDL_Texture *>> &texturesets);
+	void SetAssets(const std::initializer_list<tAsset> assets);
 	// Set/get the animation FPS
-	float GetAnimFPS() const { return mAnimFPS; }
-	void SetAnimFPS(float fps) { mAnimFPS = fps; }
+	float GetAnimFPS() const {
+		return mAnimFPS;
+	}
+	void SetAnimFPS(float fps) {
+		mAnimFPS = fps;
+	}
 
 	// Current frame set
 	float mCurrFrameSet;
 
   private:
 	// All textures in the animation
-	std::vector<std::vector<SDL_Texture *>> mAnimTextures;
+	std::vector<tAsset> mAssets;
 	// Current frame displayed
 	float mCurrFrame;
 	// Animation frame rate

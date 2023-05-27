@@ -11,36 +11,36 @@
 #include "Math.h"
 
 AnimSpriteComponent::AnimSpriteComponent(Actor *owner, int drawOrder)
-	: SpriteComponent(owner, drawOrder), mCurrFrame(0.0f), mAnimFPS(24.0f) {}
+	: SpriteComponent(owner, drawOrder), mCurrFrame(0.0f), mAnimFPS(24.0f) {
+}
 
 void AnimSpriteComponent::Update(float deltaTime) {
 	SpriteComponent::Update(deltaTime);
 
-	if (mAnimTextures[mCurrFrameSet].size() > 0) {
-		if ((mCurrFrameSet == 0)||this->mOwner->IsMoving()) {
+	if (mAssets[mCurrFrameSet].textures.size() > 0) {
+		if ((mCurrFrameSet == 0) || this->mOwner->IsMoving()) {
 			// Update the current frame based on frame rate
 			// and delta time
 			mCurrFrame += mAnimFPS * deltaTime / 2;
-			
+
 			// Wrap current frame if needed
-			while (mCurrFrame >= mAnimTextures[mCurrFrameSet].size()) {
-				mCurrFrame -= mAnimTextures[mCurrFrameSet].size();
+			while (mCurrFrame >= mAssets[mCurrFrameSet].textures.size()) {
+				mCurrFrame -= mAssets[mCurrFrameSet].textures.size();
 			}
 		}
 
 		// Set the current texture
-		SetTexture(mAnimTextures[mCurrFrameSet][static_cast<int>(mCurrFrame)]);
+		SetTexture(mAssets[mCurrFrameSet].textures[static_cast<int>(mCurrFrame)]);
 	}
 }
 
-void AnimSpriteComponent::SetAnimTextures(const std::initializer_list<std::vector<SDL_Texture *>> &texturesets) {
-	for (auto textures : texturesets) {
-		mAnimTextures.push_back(textures);
-	}
-	
-	if (mAnimTextures[mCurrFrameSet].size() > 0) {
+void AnimSpriteComponent::SetAssets(const std::initializer_list<tAsset> assets) {
+	for (auto asset : assets)
+		mAssets.push_back(asset);
+
+	if (mAssets[mCurrFrameSet].textures.size() > 0) {
 		// Set the active texture to first frame
 		mCurrFrame = 0.0f;
-		SetTexture(mAnimTextures[mCurrFrameSet][0]);
+		SetTexture(mAssets[mCurrFrameSet].textures[0]);
 	}
 }

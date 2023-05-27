@@ -41,7 +41,8 @@ void Actor::UpdateComponents(float deltaTime) {
 	}
 }
 
-void Actor::UpdateActor(float deltaTime) {}
+void Actor::UpdateActor(float deltaTime) {
+}
 
 void Actor::AddComponent(Component *component) {
 	// Find the insertion point in the sorted vector

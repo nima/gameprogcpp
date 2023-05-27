@@ -5,16 +5,18 @@
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
-
-#include "Game.h"
-#include "Actor.h"
-#include "BGSpriteComponent.h"
-#include "SDL/SDL_image.h"
-#include "Ship.h"
-#include "SpriteComponent.h"
 #include <algorithm>
 
-Game::Game() : mWindow(nullptr), mRenderer(nullptr), mIsRunning(true), mUpdatingActors(false) {}
+#include <SDL2_image/SDL_image.h>
+
+#include "Actor.h"
+#include "BGSpriteComponent.h"
+#include "Game.h"
+#include "Ship.h"
+#include "SpriteComponent.h"
+
+Game::Game() : mWindow(nullptr), mRenderer(nullptr), mIsRunning(true), mUpdatingActors(false) {
+}
 
 bool Game::Initialize() {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -76,7 +78,8 @@ void Game::ProcessInput() {
 void Game::UpdateGame() {
 	// Compute delta time
 	// Wait until 16ms has elapsed since last frame
-	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16));
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
+		;
 
 	float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
 	if (deltaTime > 0.05f) {
@@ -132,12 +135,14 @@ void Game::LoadData() {
 	// Create actor for the background (this doesn't need a subclass)
 	Actor *temp = new Actor(this);
 	temp->SetPosition(Vector2(512.0f, 384.0f));
+
 	// Create the "far back" background
 	BGSpriteComponent *bg = new BGSpriteComponent(temp);
 	bg->SetScreenSize(Vector2(1024.0f, 768.0f));
 	std::vector<SDL_Texture *> bgtexs = {GetTexture("Assets/Farback01.png"), GetTexture("Assets/Farback02.png")};
 	bg->SetBGTextures(bgtexs);
 	bg->SetScrollSpeed(-100.0f);
+
 	// Create the closer background
 	bg = new BGSpriteComponent(temp, 50);
 	bg->SetScreenSize(Vector2(1024.0f, 768.0f));
@@ -149,14 +154,13 @@ void Game::LoadData() {
 void Game::UnloadData() {
 	// Delete actors
 	// Because ~Actor calls RemoveActor, have to use a different style loop
-	while (!mActors.empty()) {
+	while (!mActors.empty())
 		delete mActors.back();
-	}
 
 	// Destroy textures
-	for (auto i : mTextures) {
+	for (auto i : mTextures)
 		SDL_DestroyTexture(i.second);
-	}
+
 	mTextures.clear();
 }
 
