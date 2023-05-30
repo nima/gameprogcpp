@@ -9,6 +9,8 @@
 
 #include <map>
 
+#include <SDL2/SDL_rect.h>
+
 #include "Component.hpp"
 
 struct TypeInfoComparator {
@@ -20,18 +22,20 @@ struct TypeInfoComparator {
 class Entity {
 private:
 	class Game *game;
+	const char *name;
 	std::map<const std::type_info*, class Component*, TypeInfoComparator> components;
 public:
-	Entity(class Game *game);
+	Entity(class Game *game, const char *name);
 	~Entity();
+	
+	const char* Name() { return this->name; };
 	
 	Component* operator[](const std::type_info* cid);
 
 	void Update(float dt);
 	void UpdateComponents(float dt);
-	//virtual void UpdateComponents(const Uint8 *state);
-	//virtual void UpdateEntity(float dt);
-
+	void SetRect(SDL_Rect &rect);
+	
 	void AddComponent(class Component *component);
 	void DelComponent(class Component *component);
 };

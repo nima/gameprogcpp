@@ -1,13 +1,8 @@
 OBJ := Component.o ControllerComponent.o Entity.o System.o Registry.o Game.o
+LIB_BOX2D_BUILD=../../box2d
 
-UNAME := $(shell uname -s)
-ifeq ($(UNAME),Darwin)
-OPTS_SDL2_INC := -F/Library/Frameworks
-OPTS_SDL2_LNK := -framework SDL2
-else
-OPTS_SDL2_INC := -I/Library/Frameworks/SDL2.framework/Headers/
-OPTS_SDL2_LNK := -lSDL2
-endif
+OPTS_SDL2_INC := -F/Library/Frameworks -I${LIB_BOX2D_BUILD}/include 
+OPTS_SDL2_LNK := -framework SDL2 -L${LIB_BOX2D_BUILD}/build/bin -lbox2d
 
 OPTS := -std=c++20 -stdlib=libc++ -g -Wall -arch arm64
 

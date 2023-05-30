@@ -1,17 +1,17 @@
-// ----------------------------------------------------------------
-// From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
 //
-// Released under the BSD License
-// See LICENSE in root directory for full details.
-// ----------------------------------------------------------------
-#include "BGSpriteComponent.h"
+//  TileMapComponent.cpp
+//  Game-mac
+//
+//  Created by Nima Talebi on 5/27/23.
+//  Copyright © 2023 Sanjay Madhav. All rights reserved.
+//
+#include "TileMapComponent.h"
 
-BGSpriteComponent::BGSpriteComponent(class Actor *owner, int drawOrder)
-	: SpriteComponent(owner, drawOrder), mScrollSpeed(0.0f) {
+TileMapComponent::TileMapComponent(class Actor *owner, std::string tilemapFilename, int drawOrder)
+: SpriteComponent(owner, drawOrder), mTileMapFilename(tilemapFilename), mScrollSpeed(0.0f) {
 }
 
-void BGSpriteComponent::Update(float deltaTime) {
+void TileMapComponent::Update(float deltaTime) {
 	SpriteComponent::Update(deltaTime);
 	for (auto &bg : mBGTextures) {
 		// Update the x offset
@@ -24,7 +24,7 @@ void BGSpriteComponent::Update(float deltaTime) {
 	}
 }
 
-void BGSpriteComponent::Draw(SDL_Renderer *renderer) {
+void TileMapComponent::Draw(SDL_Renderer *renderer) {
 	// Draw each background texture
 	for (auto &bg : mBGTextures) {
 		SDL_Rect r;
@@ -34,13 +34,13 @@ void BGSpriteComponent::Draw(SDL_Renderer *renderer) {
 		// Center the rectangle around the position of the owner
 		r.x = static_cast<int>(mOwner->GetPosition().x - r.w / 2 + bg.mOffset.x);
 		r.y = static_cast<int>(mOwner->GetPosition().y - r.h / 2 + bg.mOffset.y);
-
+		
 		// Draw this background
 		SDL_RenderCopy(renderer, bg.mTexture, nullptr, &r);
 	}
 }
 
-void BGSpriteComponent::SetBGTextures(const std::vector<SDL_Texture *> &textures) {
+void TileMapComponent::SetBGTextures(const std::vector<SDL_Texture *> &textures) {
 	int count = 0;
 	for (auto tex : textures) {
 		BGTexture temp;

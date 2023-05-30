@@ -13,6 +13,7 @@
 #include <typeinfo>
 
 #include <SDL2/SDL.h>
+#include <box2d/box2d.h>
 
 #include "Entity.hpp"
 #include "Component.hpp"
@@ -55,6 +56,17 @@ public:
 	void ProcessInput(const Uint8* state) const override;
 	void UpdateGame(float dt) const override;
 	void GenerateOutput() const override;
+	bool Collides(const SDL_Rect& rect1, const SDL_Rect& rect2) const;
+};
+
+class GravitySystem : public System {
+public:
+	GravitySystem(b2World& world);
+	void ProcessInput(const Uint8* state) const override;
+	void UpdateGame(float dt) const override;
+	void GenerateOutput() const override;
+private:
+	b2World& world;
 };
 
 class RenderSystem : public System {

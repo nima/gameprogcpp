@@ -97,7 +97,6 @@
 			buildPhases = (
 				92E46DF31B634EA30035CD21 /* Sources */,
 				92E46DF41B634EA30035CD21 /* Frameworks */,
-				92E46EA11B63615B0035CD21 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -140,27 +139,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		92E46EA11B63615B0035CD21 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Game",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ -d \"$BUILD_DIR/Debug\" ]; then\n    cp \"$SRCROOT\"/../external/GLEW/lib/mac/*.dylib $BUILD_DIR/Debug\n    cp \"$SRCROOT\"/../external/SDL/lib/mac/*.dylib $BUILD_DIR/Debug\nfi\n\nif [ -d \"$BUILD_DIR/Release\" ]; then\n    cp \"$SRCROOT\"/../external/GLEW/lib/mac/*.dylib $BUILD_DIR/Release\n    cp \"$SRCROOT\"/../external/SDL/lib/mac/*.dylib $BUILD_DIR/Release\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		92E46DF31B634EA30035CD21 /* Sources */ = {
@@ -229,9 +207,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -278,7 +254,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
@@ -289,31 +264,30 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				DEAD_CODE_STRIPPING = YES;
+				EXCLUDED_ARCHS = x86_64;
 				FRAMEWORK_SEARCH_PATHS = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_CPP_RTTI = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(SRCROOT)/../external/SDL/include",
 					"$(SRCROOT)/../external/GLEW/include",
 					"$(SRCROOT)/../external/SOIL/include",
+					"$(SRCROOT)/../../box2d/include",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/../external/GLEW/lib/mac",
-					"$(SRCROOT)/../external/SDL/lib/mac",
 					"$(SRCROOT)/../external/SOIL/lib/mac",
+					"$(SRCROOT)/../../box2d/build/bin",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				OTHER_LDFLAGS = (
 					"-lGLEW.2.1.0",
-					"-lSDL2-2.0.0",
-					"-lSDL2_mixer-2.0.0",
-					"-lSDL2_ttf-2.0.0",
 					"-lSOIL",
-					"-lSDL2_image-2.0.0",
+					"-lbox2d",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
 			};
 			name = Debug;
 		};
@@ -322,31 +296,31 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				DEAD_CODE_STRIPPING = YES;
+				EXCLUDED_ARCHS = x86_64;
 				FRAMEWORK_SEARCH_PATHS = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_CPP_RTTI = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(SRCROOT)/../external/SDL/include",
 					"$(SRCROOT)/../external/GLEW/include",
 					"$(SRCROOT)/../external/SOIL/include",
+					"$(SRCROOT)/../../box2d/include",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/../external/GLEW/lib/mac",
-					"$(SRCROOT)/../external/SDL/lib/mac",
 					"$(SRCROOT)/../external/SOIL/lib/mac",
+					"$(SRCROOT)/../../box2d/build/bin",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lGLEW.2.1.0",
-					"-lSDL2-2.0.0",
-					"-lSDL2_mixer-2.0.0",
-					"-lSDL2_ttf-2.0.0",
 					"-lSOIL",
-					"-lSDL2_image-2.0.0",
+					"-lbox2d",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
 			};
 			name = Release;
 		};

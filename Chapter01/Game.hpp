@@ -10,11 +10,11 @@
 #include <vector>
 
 #include <SDL2/SDL.h>
+#include <box2d/box2d.h>
 
 #include "Registry.hpp"
 #include "Entity.hpp"
 #include "System.hpp"
-
 #include "ControllerComponent.hpp"
 
 // Game class
@@ -52,7 +52,5 @@ private:
 
 	std::vector<Entity*> entities;
 
-	SDL_Rect net;
-	SDL_Rect tWall;
-	SDL_Rect bWall;
+	b2World world;
 };

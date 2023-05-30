@@ -8,12 +8,9 @@
 
 #include "Registry.hpp"
 
-Registry::Registry() {
-}
+Registry::Registry() {}
 
-Registry::~Registry() {
-	
-}
+Registry::~Registry() {}
 
 void Registry::Register(System *system) {
 	this->systems.push_back(system);

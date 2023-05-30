@@ -19,12 +19,13 @@ Game::Game():
 	mWindow(nullptr),
 	mRenderer(nullptr),
 	winWidth(1200),
-	winHeight(800)
+	winHeight(800),
+	world(b2Vec2{0.0f, -9.8f})
 {}
 
 bool Game::Initialize() {
 	// Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_EVENTS) != 0) {
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 		return false;
 	}
@@ -47,6 +48,7 @@ bool Game::Initialize() {
 	this->registry->Register(new InputSystem());
 	this->registry->Register(new VelocitySystem());
 	this->registry->Register(new CollisionSystem());
+	this->registry->Register(new GravitySystem(world));
 	this->registry->Register(new RenderSystem(mRenderer));
 
 	Entity *entity;
@@ -54,40 +56,51 @@ bool Game::Initialize() {
 	tBoundary lPaddleBoundary = {10, 20, 50, winHeight-20};
 	tBoundary rPaddleBoundary = {winWidth-50, 20, winWidth-10, winHeight-20};
 
-	// Left Paddle
-	entity = new Entity(this);
+	entity = new Entity(this, "lPaddle");
 	entity->AddComponent(new ControllerComponent(entity, 10.0f, tController{SDL_SCANCODE_W, SDL_SCANCODE_S}));
 	entity->AddComponent(new PositionComponent(entity, tPosition{10.0f+paddleW/2.0f, winWidth/2.0f}, lPaddleBoundary));
 	entity->AddComponent(new ShapeComponent(entity, tDimensions{paddleW, paddleH}));
-	entity->AddComponent(new PhysicsComponent(entity, tCollisionZoneX{20.0f, 25.0f}));
+	entity->AddComponent(new PhysicsComponent(entity));
 	this->registry->Register(entity);
 
-	// Right Paddle
-	entity = new Entity(this);
+	entity = new Entity(this, "rPaddle");
 	entity->AddComponent(new ControllerComponent(entity, 10.0f, tController{SDL_SCANCODE_I, SDL_SCANCODE_K}));
 	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth - (10.0f + paddleW/2.0f), winHeight - winWidth/2.0f}, rPaddleBoundary));
 	entity->AddComponent(new ShapeComponent(entity, tDimensions{paddleW, paddleH}));
-	entity->AddComponent(new PhysicsComponent(entity, tCollisionZoneX{-25, -20}));
+	entity->AddComponent(new PhysicsComponent(entity));
 	this->registry->Register(entity);
 
-	// Ball #1
-	entity = new Entity(this);
+	entity = new Entity(this, "ball#1");
 	entity->AddComponent(new PositionComponent(entity, tPosition{winHeight/2.0f, winWidth/2.0f}, screenBoundary));
-	entity->AddComponent(new ShapeComponent(entity, tDimensions{15.0, 15.0}));
+	entity->AddComponent(new ShapeComponent(entity, tDimensions{15.0f, 15.0f}));
 	entity->AddComponent(new MobileComponent(entity, tVelocity{-200.0f, 235.0f}));
+	entity->AddComponent(new PhysicsComponent(entity));
+	entity->AddComponent(new GravityComponent(entity, world));
 	this->registry->Register(entity);
 
-	// Ball #1
-	entity = new Entity(this);
+	entity = new Entity(this, "ball#2");
 	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth - winHeight/2.0f, winHeight - winWidth/2.0f}, screenBoundary));
-	entity->AddComponent(new ShapeComponent(entity, tDimensions{15.0, 15.0}));
+	entity->AddComponent(new ShapeComponent(entity, tDimensions{15.0f, 15.0f}));
 	entity->AddComponent(new MobileComponent(entity, tVelocity{100.0f, 20.0f}));
+	entity->AddComponent(new PhysicsComponent(entity));
 	this->registry->Register(entity);
-	
-	const int thickness = 10;
-	tWall = SDL_Rect{0, 0, winWidth, thickness};
-	bWall = SDL_Rect{0, winHeight-thickness, winWidth, thickness};
-	net = SDL_Rect{static_cast<int>(winWidth - thickness)/2, 0, thickness, winHeight};
+
+	const float wallThickness = 10.0f;
+
+	entity = new Entity(this, "wallTop");
+	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth/2.0f, wallThickness/2.0f}, screenBoundary));
+	entity->AddComponent(new ShapeComponent(entity, tDimensions{winWidth/1.0f, wallThickness}));
+	this->registry->Register(entity);
+
+	entity = new Entity(this, "wallBottom");
+	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth/2.0f, winHeight-wallThickness/2.0f}, screenBoundary));
+	entity->AddComponent(new ShapeComponent(entity, tDimensions{winWidth/1.0f, wallThickness}));
+	this->registry->Register(entity);
+
+	entity = new Entity(this, "net");
+	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth/2.0f, winHeight/2.0f}, screenBoundary));
+	entity->AddComponent(new ShapeComponent(entity, tDimensions{3.0f, winHeight/1.1f}));
+	this->registry->Register(entity);
 	
 	return true;
 }
@@ -134,21 +147,6 @@ void Game::UpdateGame() {
 	mTicksCount = SDL_GetTicks();
 
 	this->registry->UpdateGame(dt);
-	/*
-	// Update paddle position based on direction
-	for (auto &paddle: paddles) {
-		if (paddle.dir == 0) continue;
-		
-		// Move the paddle
-		paddle.pos.y += paddle.dir * 300.0f * deltaTime;
-
-		// Make sure paddle doesn't move off screen!
-		if (paddle.pos.y < (paddleH/2.0f + thickness)) {
-			paddle.pos.y = paddleH/2.0f + thickness;
-		} else if (paddle.pos.y > (winHeight - paddleH/2.0f - thickness)) {
-			paddle.pos.y = winHeight - paddleH/2.0f - thickness;
-		}
-	}*/
 }
 
 void Game::GenerateOutput() {
@@ -161,41 +159,7 @@ void Game::GenerateOutput() {
 	// Draw walls
 	SDL_SetRenderDrawColor(mRenderer, 0xff, 0xff, 0xff, 0xff);
 	
-	// Draw the two walls and the net
-	SDL_RenderFillRect(mRenderer, &tWall);
-	SDL_RenderFillRect(mRenderer, &bWall);
-	SDL_RenderFillRect(mRenderer, &net);
-
 	this->registry->GenerateOutput();
-	/*
-	// Draw paddle
-	SDL_Rect lPaddle{
-		static_cast<int>(paddles[0].pos.x),
-		static_cast<int>(paddles[0].pos.y - paddleH/2),
-		thickness,
-		static_cast<int>(paddleH)
-	};
-	SDL_RenderFillRect(mRenderer, &lPaddle);
-
-	SDL_Rect rPaddle = {
-		static_cast<int>(paddles[1].pos.x),
-		static_cast<int>(paddles[1].pos.y - paddleH/2),
-		thickness,
-		static_cast<int>(paddleH)
-	};
-	SDL_RenderFillRect(mRenderer, &rPaddle);
-
-	// Draw balls
-	for (const auto &ball: balls) {
-		SDL_Rect ballRect{
-			static_cast<int>(ball.pos.x - thickness/2),
-			static_cast<int>(ball.pos.y - thickness/2),
-			thickness,
-			thickness
-		};
-		SDL_RenderFillRect(mRenderer, &ballRect);
-	}
-	*/
 	
 	// Swap front buffer and back buffer
 	SDL_RenderPresent(mRenderer);
@@ -206,3 +170,4 @@ void Game::Shutdown() {
 	SDL_DestroyWindow(mWindow);
 	SDL_Quit();
 }
+

@@ -1,4 +1,4 @@
-OBJ := Math.o Actor.o Component.o AnimSpriteComponent.o BGSpriteComponent.o SpriteComponent.o Ship.o Game.o
+OBJ := Math.o Actor.o Component.o AnimSpriteComponent.o TileMapComponent.o BGSpriteComponent.o SpriteComponent.o Ship.o Game.o
 
 UNAME := $(shell uname -s)
 ifeq ($(UNAME),Darwin)

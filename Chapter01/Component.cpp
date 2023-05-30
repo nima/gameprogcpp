@@ -30,15 +30,6 @@ const tController* ControllerComponent::Direction() const {
 ShapeComponent::ShapeComponent(Entity *owner, tDimensions dimensions) : Component(owner) {
 	this->dimensions = dimensions;
 }
-const std::type_info* ShapeComponent::TypeId() const {
-	return &typeid(ShapeComponent);
-}
-float ShapeComponent::w() const {
-	return this->dimensions.width;
-}
-float ShapeComponent::h() const {
-	return this->dimensions.height;
-}
 
 PositionComponent::PositionComponent(Entity *owner, tPosition position, tBoundary boundary) : Component(owner) {
 	this->position = position;
@@ -77,9 +68,19 @@ float MobileComponent::dydt() const {
 	return this->velocity.dydt;
 }
 
-PhysicsComponent::PhysicsComponent(Entity *owner, tCollisionZoneX czx) : Component(owner) {
-	this->czx = czx;
+PhysicsComponent::PhysicsComponent(Entity *owner) : Component(owner) {
 }
 const std::type_info* PhysicsComponent::TypeId() const {
 	return &typeid(PhysicsComponent);
+}
+
+GravityComponent::GravityComponent(Entity *owner, b2World &world) : Component(owner), world(world) {
+	// Create a Box2D body for the entity
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody; // The body will move in response to forces
+	bodyDef.position.Set(0.0f, 0.0f); // Set the initial position of the body
+	b2Body* body = world.CreateBody(&bodyDef);
+}
+const std::type_info* GravityComponent::TypeId() const {
+	return &typeid(GravityComponent);
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3CBDFD882A21D05B00D21AE3 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CBDFD872A21D05B00D21AE3 /* SDL2.framework */; };
+		3CBDFD8F2A22BCAE00D21AE3 /* TileMapComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CBDFD8D2A22BCAE00D21AE3 /* TileMapComponent.cpp */; };
 		9223C4781F009428009A94D7 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9223C4671F009428009A94D7 /* Game.cpp */; };
 		9223C4791F009428009A94D7 /* Actor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9223C4681F009428009A94D7 /* Actor.cpp */; };
 		9223C47A1F009428009A94D7 /* AnimSpriteComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9223C46A1F009428009A94D7 /* AnimSpriteComponent.cpp */; };
@@ -17,14 +18,14 @@
 		9223C47E1F009428009A94D7 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9223C4721F009428009A94D7 /* Math.cpp */; };
 		9223C47F1F009428009A94D7 /* Ship.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9223C4741F009428009A94D7 /* Ship.cpp */; };
 		9223C4801F009428009A94D7 /* SpriteComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9223C4761F009428009A94D7 /* SpriteComponent.cpp */; };
-		92D324FB1B697389005A86C7 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D324FA1B697389005A86C7 /* CoreFoundation.framework */; };
-		92E46E941B6353E50035CD21 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E46E931B6353E50035CD21 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3CBDFD872A21D05B00D21AE3 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
-		3CBDFD892A21D05F00D21AE3 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		3CBDFD8A2A21D06000D21AE3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		3CBDFD8B2A22BC6800D21AE3 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		3CBDFD8C2A22BC6800D21AE3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		3CBDFD8D2A22BCAE00D21AE3 /* TileMapComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TileMapComponent.cpp; sourceTree = "<group>"; };
+		3CBDFD8E2A22BCAE00D21AE3 /* TileMapComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TileMapComponent.h; sourceTree = "<group>"; };
 		9223C4671F009428009A94D7 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
 		9223C4681F009428009A94D7 /* Actor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Actor.cpp; sourceTree = "<group>"; };
 		9223C4691F009428009A94D7 /* Actor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Actor.h; sourceTree = "<group>"; };
@@ -42,9 +43,7 @@
 		9223C4751F009428009A94D7 /* Ship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ship.h; sourceTree = "<group>"; };
 		9223C4761F009428009A94D7 /* SpriteComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteComponent.cpp; sourceTree = "<group>"; };
 		9223C4771F009428009A94D7 /* SpriteComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteComponent.h; sourceTree = "<group>"; };
-		92D324FA1B697389005A86C7 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		92E46DF71B634EA30035CD21 /* Game-mac */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Game-mac"; sourceTree = BUILT_PRODUCTS_DIR; };
-		92E46E931B6353E50035CD21 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,8 +52,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3CBDFD882A21D05B00D21AE3 /* SDL2.framework in Frameworks */,
-				92D324FB1B697389005A86C7 /* CoreFoundation.framework in Frameworks */,
-				92E46E941B6353E50035CD21 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,8 +61,8 @@
 		3CBDFD862A21D05B00D21AE3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3CBDFD892A21D05F00D21AE3 /* OpenGL.framework */,
-				3CBDFD8A2A21D06000D21AE3 /* CoreFoundation.framework */,
+				3CBDFD8C2A22BC6800D21AE3 /* CoreFoundation.framework */,
+				3CBDFD8B2A22BC6800D21AE3 /* OpenGL.framework */,
 				3CBDFD872A21D05B00D21AE3 /* SDL2.framework */,
 			);
 			name = Frameworks;
@@ -78,6 +75,8 @@
 				9223C4691F009428009A94D7 /* Actor.h */,
 				9223C46A1F009428009A94D7 /* AnimSpriteComponent.cpp */,
 				9223C46B1F009428009A94D7 /* AnimSpriteComponent.h */,
+				3CBDFD8D2A22BCAE00D21AE3 /* TileMapComponent.cpp */,
+				3CBDFD8E2A22BCAE00D21AE3 /* TileMapComponent.h */,
 				9223C46C1F009428009A94D7 /* BGSpriteComponent.cpp */,
 				9223C46D1F009428009A94D7 /* BGSpriteComponent.h */,
 				9223C46E1F009428009A94D7 /* Component.cpp */,
@@ -92,8 +91,6 @@
 				9223C4761F009428009A94D7 /* SpriteComponent.cpp */,
 				9223C4771F009428009A94D7 /* SpriteComponent.h */,
 				92E46DF81B634EA30035CD21 /* Products */,
-				92D324FA1B697389005A86C7 /* CoreFoundation.framework */,
-				92E46E931B6353E50035CD21 /* OpenGL.framework */,
 				3CBDFD862A21D05B00D21AE3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -186,6 +183,7 @@
 				9223C47B1F009428009A94D7 /* BGSpriteComponent.cpp in Sources */,
 				9223C4781F009428009A94D7 /* Game.cpp in Sources */,
 				9223C4801F009428009A94D7 /* SpriteComponent.cpp in Sources */,
+				3CBDFD8F2A22BCAE00D21AE3 /* TileMapComponent.cpp in Sources */,
 				9223C47F1F009428009A94D7 /* Ship.cpp in Sources */,
 				9223C4791F009428009A94D7 /* Actor.cpp in Sources */,
 				9223C47C1F009428009A94D7 /* Component.cpp in Sources */,

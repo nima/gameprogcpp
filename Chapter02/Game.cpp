@@ -9,11 +9,12 @@
 
 #include <SDL2_image/SDL_image.h>
 
-#include "Actor.h"
 #include "BGSpriteComponent.h"
+#include "TileMapComponent.h"
+#include "SpriteComponent.h"
+#include "Actor.h"
 #include "Game.h"
 #include "Ship.h"
-#include "SpriteComponent.h"
 
 Game::Game() : mWindow(nullptr), mRenderer(nullptr), mIsRunning(true), mUpdatingActors(false) {
 }
@@ -136,6 +137,7 @@ void Game::LoadData() {
 	Actor *temp = new Actor(this);
 	temp->SetPosition(Vector2(512.0f, 384.0f));
 
+	/*
 	// Create the "far back" background
 	BGSpriteComponent *bg = new BGSpriteComponent(temp);
 	bg->SetScreenSize(Vector2(1024.0f, 768.0f));
@@ -149,6 +151,14 @@ void Game::LoadData() {
 	bgtexs = {GetTexture("Assets/Stars.png"), GetTexture("Assets/Stars.png")};
 	bg->SetBGTextures(bgtexs);
 	bg->SetScrollSpeed(-200.0f);
+	*/
+	
+	TileMapComponent *bg = new TileMapComponent(temp, "Assets/MapLayer1.csv", 91);
+	bg->SetScreenSize(Vector2(1024.0f, 768.0f));
+	bg->SetScrollSpeed(-100.0f);
+
+	bg = new TileMapComponent(temp, "Assets/MapLayer2.csv", 92);
+	bg = new TileMapComponent(temp, "Assets/MapLayer3.csv", 93);
 }
 
 void Game::UnloadData() {

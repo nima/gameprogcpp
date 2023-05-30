@@ -14,6 +14,7 @@
 #include <typeindex>
 
 #include <SDL2/SDL_shape.h>
+#include <box2d/box2d.h>
 
 #include <stdio.h>
 
@@ -47,12 +48,15 @@ private:
 };
 
 struct tDimensions { float width; float height; };
+
 class ShapeComponent : public Component {
 public:
-	ShapeComponent(Entity *owner, tDimensions dim);
-	const std::type_info* TypeId() const override;
-	float w() const;
-	float h() const;
+	ShapeComponent(Entity* owner, tDimensions dimensions);
+	const std::type_info* TypeId() const override {
+		return &typeid(ShapeComponent);
+	}
+	float w() const { return this->dimensions.width; }
+	float h() const { return this->dimensions.height; }
 private:
 	tDimensions dimensions;
 };
@@ -71,13 +75,19 @@ private:
 	tBoundary boundary;
 };
 
-struct tCollisionZoneX { float x1; float x2; };
 class PhysicsComponent : public Component {
 public:
-	PhysicsComponent(Entity *owner, tCollisionZoneX czx);
+	PhysicsComponent(Entity *owner);
 	const std::type_info* TypeId() const override;
 private:
-	tCollisionZoneX czx;
+};
+
+class GravityComponent : public Component {
+public:
+	GravityComponent(Entity *owner, b2World &world);
+	const std::type_info* TypeId() const override;
+private:
+	b2World &world;
 };
 
 struct tVelocity { float dxdt; float dydt; };

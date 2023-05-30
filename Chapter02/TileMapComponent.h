@@ -1,26 +1,27 @@
-// ----------------------------------------------------------------
-// From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
 //
-// Released under the BSD License
-// See LICENSE in root directory for full details.
-// ----------------------------------------------------------------
+//  TileMapComponent.h
+//  Game-mac
+//
+//  Created by Nima Talebi on 5/27/23.
+//  Copyright © 2023 Sanjay Madhav. All rights reserved.
+//
 #pragma once
 
-#include <vector>
+#include <string>
 
 #include "Math.h"
 
 #include "SpriteComponent.h"
 #include "Actor.h"
 
-class BGSpriteComponent : public SpriteComponent {
-  public:
-	// Set draw order to default to lower (so it's in the background)
-	BGSpriteComponent(class Actor *owner, int drawOrder = 10);
-	// Update/draw overridden from parent
+class TileMapComponent : public SpriteComponent {
+public:
+	TileMapComponent(class Actor *owner, std::string tilemapFilename, int drawOrder = 9);
+	
+	// Update animation every frame (overridden from component)
 	void Update(float deltaTime) override;
-	void Draw(SDL_Renderer *renderer) override;
+	virtual void Draw(SDL_Renderer *renderer) override;
+	
 	// Set the textures used for the background
 	void SetBGTextures(const std::vector<SDL_Texture *> &textures);
 	// Get/set screen size and scroll speed
@@ -33,8 +34,9 @@ class BGSpriteComponent : public SpriteComponent {
 	float GetScrollSpeed() const {
 		return mScrollSpeed;
 	}
-
-  private:
+private:
+	std::string mTileMapFilename;
+	
 	// Struct to encapsulate each bg image and its offset
 	struct BGTexture {
 		SDL_Texture *mTexture;
