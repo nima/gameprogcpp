@@ -6,9 +6,9 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
-#include <math.h>
-
 #include "Game.hpp"
+
+#include <math.h>
 
 const float paddleH = 100.0f;
 const float paddleW = 20.0f;
@@ -58,47 +58,45 @@ bool Game::Initialize() {
 
 	entity = new Entity(this, "lPaddle");
 	entity->AddComponent(new ControllerComponent(entity, 10.0f, tController{SDL_SCANCODE_W, SDL_SCANCODE_S}));
-	entity->AddComponent(new PositionComponent(entity, tPosition{10.0f+paddleW/2.0f, winWidth/2.0f}, lPaddleBoundary));
+	entity->AddComponent(new PositionComponent(entity, world, tPosition{10.0f+paddleW/2.0f, winWidth/2.0f}, lPaddleBoundary));
 	entity->AddComponent(new ShapeComponent(entity, tDimensions{paddleW, paddleH}));
-	entity->AddComponent(new PhysicsComponent(entity));
 	this->registry->Register(entity);
 
 	entity = new Entity(this, "rPaddle");
 	entity->AddComponent(new ControllerComponent(entity, 10.0f, tController{SDL_SCANCODE_I, SDL_SCANCODE_K}));
-	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth - (10.0f + paddleW/2.0f), winHeight - winWidth/2.0f}, rPaddleBoundary));
+	entity->AddComponent(new PositionComponent(entity, world, tPosition{winWidth - (10.0f + paddleW/2.0f), winHeight - winWidth/2.0f}, rPaddleBoundary));
 	entity->AddComponent(new ShapeComponent(entity, tDimensions{paddleW, paddleH}));
-	entity->AddComponent(new PhysicsComponent(entity));
 	this->registry->Register(entity);
 
 	entity = new Entity(this, "ball#1");
-	entity->AddComponent(new PositionComponent(entity, tPosition{winHeight/2.0f, winWidth/2.0f}, screenBoundary));
+	entity->AddComponent(new PositionComponent(entity, world, tPosition{winHeight/2.0f, winWidth/5.0f}, screenBoundary));
 	entity->AddComponent(new ShapeComponent(entity, tDimensions{15.0f, 15.0f}));
-	entity->AddComponent(new MobileComponent(entity, tVelocity{-200.0f, 235.0f}));
-	entity->AddComponent(new PhysicsComponent(entity));
-	entity->AddComponent(new GravityComponent(entity, world));
+	entity->AddComponent(new VelocityComponent(entity, world, tVelocity{50.0f, 0.0f}));
+	entity->AddComponent(new AccelerationComponent(entity, world));
 	this->registry->Register(entity);
 
+	/*
 	entity = new Entity(this, "ball#2");
 	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth - winHeight/2.0f, winHeight - winWidth/2.0f}, screenBoundary));
 	entity->AddComponent(new ShapeComponent(entity, tDimensions{15.0f, 15.0f}));
-	entity->AddComponent(new MobileComponent(entity, tVelocity{100.0f, 20.0f}));
 	entity->AddComponent(new PhysicsComponent(entity));
 	this->registry->Register(entity);
-
+    */
+	
 	const float wallThickness = 10.0f;
 
 	entity = new Entity(this, "wallTop");
-	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth/2.0f, wallThickness/2.0f}, screenBoundary));
+	entity->AddComponent(new PositionComponent(entity, world, tPosition{winWidth/2.0f, wallThickness/2.0f}, screenBoundary));
 	entity->AddComponent(new ShapeComponent(entity, tDimensions{winWidth/1.0f, wallThickness}));
 	this->registry->Register(entity);
 
 	entity = new Entity(this, "wallBottom");
-	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth/2.0f, winHeight-wallThickness/2.0f}, screenBoundary));
+	entity->AddComponent(new PositionComponent(entity, world, tPosition{winWidth/2.0f, winHeight-wallThickness/2.0f}, screenBoundary));
 	entity->AddComponent(new ShapeComponent(entity, tDimensions{winWidth/1.0f, wallThickness}));
 	this->registry->Register(entity);
 
 	entity = new Entity(this, "net");
-	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth/2.0f, winHeight/2.0f}, screenBoundary));
+	entity->AddComponent(new PositionComponent(entity, world, tPosition{winWidth/2.0f, winHeight/2.0f}, screenBoundary));
 	entity->AddComponent(new ShapeComponent(entity, tDimensions{3.0f, winHeight/1.1f}));
 	this->registry->Register(entity);
 	

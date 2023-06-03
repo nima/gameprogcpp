@@ -7,39 +7,39 @@
 //
 #include "Component.hpp"
 
+#include <box2d/b2_types.h>
+
+#include "Entity.hpp"
+
+#include <iostream>
+#include <SDL2/SDL_log.h>
+
 Component::Component(class Entity* owner) {
 	this->owner = owner;
 }
-//virtual ~Component();
-//virtual void Update(float dt);
 
 ControllerComponent::ControllerComponent(Entity *owner, float speed, tController controller) : Component(owner) {
 	this->speed = speed;
 	this->controller = controller;
-}
-float ControllerComponent::Speed() const {
-	return this->speed;
-}
-const std::type_info* ControllerComponent::TypeId() const {
-	return &typeid(ControllerComponent);
-}
-const tController* ControllerComponent::Direction() const {
-	return &this->controller;
 }
 
 ShapeComponent::ShapeComponent(Entity *owner, tDimensions dimensions) : Component(owner) {
 	this->dimensions = dimensions;
 }
 
-PositionComponent::PositionComponent(Entity *owner, tPosition position, tBoundary boundary) : Component(owner) {
+PositionComponent::PositionComponent(Entity *owner, b2World &world, tPosition position, tBoundary boundary) : Component(owner), world(world)  {
 	this->position = position;
 	this->boundary = boundary;
+	
+	// Create a Box2D body for the entity
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody; // The body will move in response to forces
+	bodyDef.position.Set(this->position.x, this->position.y); // Set the initial position of the body
+	this->body = world.CreateBody(&bodyDef);
 }
-const std::type_info* PositionComponent::TypeId() const {
-	return &typeid(PositionComponent);
-}
-void PositionComponent::Move(ShapeComponent *sc, float dx, float dy) {
-	this->position.y += (dy);
+
+void PositionComponent::UpdatePosition(ShapeComponent *sc, float dx, float dy) {
+	this->position.y += dy;
 	if (this->position.y < (sc->h()/2.0f + sc->w())) {
 		this->position.y = sc->h()/2.0f + sc->w();
 	} else if (this->position.y > (this->boundary.yN - sc->h()/2.0f)) {
@@ -48,39 +48,19 @@ void PositionComponent::Move(ShapeComponent *sc, float dx, float dy) {
 
 	this->position.x += dx;
 }
-float PositionComponent::x() const {
-	return this->position.x;
-}
-float PositionComponent::y() const {
-	return this->position.y;
-}
 
-MobileComponent::MobileComponent(Entity *owner, tVelocity velocity) : Component(owner) {
+VelocityComponent::VelocityComponent(Entity *owner, b2World &world, tVelocity velocity) : Component(owner), world(world)  {
 	this->velocity = velocity;
 }
-const std::type_info* MobileComponent::TypeId() const {
-	return &typeid(MobileComponent);
-}
-float MobileComponent::dxdt() const {
-	return this->velocity.dxdt;
-}
-float MobileComponent::dydt() const {
-	return this->velocity.dydt;
-}
 
-PhysicsComponent::PhysicsComponent(Entity *owner) : Component(owner) {
-}
-const std::type_info* PhysicsComponent::TypeId() const {
-	return &typeid(PhysicsComponent);
-}
+AccelerationComponent::AccelerationComponent(Entity *owner, b2World &world) : Component(owner), world(world) {
+	/*
+	Component* component;
+	const std::type_info* cid;
+	Entity *entity = this->owner;
 
-GravityComponent::GravityComponent(Entity *owner, b2World &world) : Component(owner), world(world) {
-	// Create a Box2D body for the entity
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody; // The body will move in response to forces
-	bodyDef.position.Set(0.0f, 0.0f); // Set the initial position of the body
-	b2Body* body = world.CreateBody(&bodyDef);
-}
-const std::type_info* GravityComponent::TypeId() const {
-	return &typeid(GravityComponent);
+	cid = &typeid(PositionComponent);
+	component = (*entity)[cid];
+	PositionComponent* pc = static_cast<PositionComponent*>(component);
+	*/
 }
