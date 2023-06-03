@@ -31,6 +31,7 @@ void Entity::DelComponent(class Component *component) {}
 void Entity::UpdateComponents(float dt) {}
 
 void Entity::SetRect(SDL_Rect &rect) {
+	/*
 	const std::type_info* cid;
 	Component *component;
 
@@ -38,12 +39,13 @@ void Entity::SetRect(SDL_Rect &rect) {
 	component = (*this)[cid];
 	PositionComponent* pc = static_cast<PositionComponent*>(component);
 
-	cid = &typeid(ShapeComponent);
+	cid = &typeid(PhysicalComponent);
 	component = (*this)[cid];
-	ShapeComponent* sc = static_cast<ShapeComponent*>(component);
+	PhysicalComponent* sc = static_cast<PhysicalComponent*>(component);
 
 	rect.w = sc->w();
 	rect.h = sc->h();
 	rect.x = pc->x() - rect.w / 2;
 	rect.y = pc->y() - rect.h / 2;
+	*/
 }

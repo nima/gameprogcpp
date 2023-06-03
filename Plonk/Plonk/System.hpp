@@ -43,16 +43,6 @@ public:
 	void GenerateOutput() override {}
 };
 
-class VelocitySystem : public System {
-public:
-	VelocitySystem();
-	void ProcessInput(const Uint8* state) const override {}
-	void UpdateGame(float dt) override { this->Move(dt); }
-	void GenerateOutput() override {}
-private:
-	void Move(float dt) const;
-};
-
 class CollisionSystem : public System {
 public:
 	CollisionSystem();
@@ -63,9 +53,9 @@ public:
 	bool Collides(const SDL_Rect& rect1, const SDL_Rect& rect2) const;
 };
 
-class GravitySystem : public System {
+class PhysicsSystem : public System {
 public:
-	GravitySystem(b2World& world);
+	PhysicsSystem(b2World& world);
 	void ProcessInput(const Uint8* state) const override {}
 	void UpdateGame(float dt) override;
 	void GenerateOutput() override {}
@@ -75,7 +65,7 @@ private:
 
 class RenderSystem : public System {
 public:
-	RenderSystem(SDL_Renderer* renderer) : System({&typeid(ShapeComponent), &typeid(PositionComponent)}) { this->renderer = renderer; }
+	RenderSystem(SDL_Renderer* renderer) : System({&typeid(PhysicalComponent)}), renderer(renderer) {}
 	void ProcessInput(const Uint8 *state) const {}
 	void UpdateGame(float dt) {}
 	void GenerateOutput() { this->Render(); }

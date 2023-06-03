@@ -10,7 +10,6 @@
 #include <vector>
 
 #include <SDL2/SDL.h>
-#include <box2d/box2d.h>
 
 #include "Registry.hpp"
 #include "Entity.hpp"
@@ -34,6 +33,9 @@ private:
 	void UpdateGame();
 	void GenerateOutput();
 
+	b2Body *mkPaddle(float x, float y);
+	b2Body *mkBall(float x, float y);
+	
 	Registry *registry;
 	
 	// Number of ticks since start of game

@@ -20,8 +20,51 @@ Game::Game():
 	mRenderer(nullptr),
 	winWidth(1200),
 	winHeight(800),
-	world(b2Vec2{0.0f, -9.8f})
+	world(b2Vec2{0.0f, 0.0f})
 {}
+
+b2Body *Game::mkPaddle(float x, float y) {
+	world.SetAutoClearForces(false);
+	
+	b2PolygonShape shape;
+	shape.SetAsBox(paddleW, paddleH);
+	
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set(x, y);
+	bodyDef.gravityScale = 1.0;
+	b2Body *body = this->world.CreateBody(&bodyDef);
+	
+	b2FixtureDef b2fd;
+	b2fd.shape = &shape;
+	body->CreateFixture(&b2fd);
+	
+	b2Vec2 b2vCenter(0.0f, 0.0f);
+	b2MassData *b2md = new b2MassData();
+	b2md->mass = 1.0f;
+	body->SetMassData(b2md);
+	
+	return body;
+}
+
+b2Body *Game::mkBall(float x, float y) {
+	//b2CircleShape shape;
+	//shape.m_radius = 150;
+	b2PolygonShape shape;
+	shape.SetAsBox(paddleW/2.0f, paddleW/2.0f);
+
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set(x, y);
+	b2Body *body = this->world.CreateBody(&bodyDef);
+	
+	b2FixtureDef b2fd;
+	b2fd.shape = &shape;
+	body->CreateFixture(&b2fd);
+	
+	return body;
+}
+
 
 bool Game::Initialize() {
 	// Initialize SDL
@@ -31,7 +74,7 @@ bool Game::Initialize() {
 	}
 	
 	// Create an SDL Window
-	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 1)", 100, 100, winWidth, winHeight, 0);
+	mWindow = SDL_CreateWindow("Plonk", 100, 100, winWidth, winHeight, 0);
 	if (!mWindow) {
 		SDL_Log("Failed to create window: %s", SDL_GetError());
 		return false;
@@ -46,45 +89,36 @@ bool Game::Initialize() {
 	
 	this->registry = new Registry();
 	this->registry->Register(new InputSystem());
-	this->registry->Register(new VelocitySystem());
+	this->registry->Register(new PhysicsSystem(world));
 	this->registry->Register(new CollisionSystem());
-	this->registry->Register(new GravitySystem(world));
 	this->registry->Register(new RenderSystem(mRenderer));
-
-	Entity *entity;
-	tBoundary screenBoundary = {0, 0, winWidth, winHeight};
-	tBoundary lPaddleBoundary = {10, 20, 50, winHeight-20};
-	tBoundary rPaddleBoundary = {winWidth-50, 20, winWidth-10, winHeight-20};
-
-	entity = new Entity(this, "lPaddle");
-	entity->AddComponent(new ControllerComponent(entity, 10.0f, tController{SDL_SCANCODE_W, SDL_SCANCODE_S}));
-	entity->AddComponent(new PositionComponent(entity, world, tPosition{10.0f+paddleW/2.0f, winWidth/2.0f}, lPaddleBoundary));
-	entity->AddComponent(new ShapeComponent(entity, tDimensions{paddleW, paddleH}));
-	this->registry->Register(entity);
-
-	entity = new Entity(this, "rPaddle");
-	entity->AddComponent(new ControllerComponent(entity, 10.0f, tController{SDL_SCANCODE_I, SDL_SCANCODE_K}));
-	entity->AddComponent(new PositionComponent(entity, world, tPosition{winWidth - (10.0f + paddleW/2.0f), winHeight - winWidth/2.0f}, rPaddleBoundary));
-	entity->AddComponent(new ShapeComponent(entity, tDimensions{paddleW, paddleH}));
-	this->registry->Register(entity);
-
-	entity = new Entity(this, "ball#1");
-	entity->AddComponent(new PositionComponent(entity, world, tPosition{winHeight/2.0f, winWidth/5.0f}, screenBoundary));
-	entity->AddComponent(new ShapeComponent(entity, tDimensions{15.0f, 15.0f}));
-	entity->AddComponent(new VelocityComponent(entity, world, tVelocity{50.0f, 0.0f}));
-	entity->AddComponent(new AccelerationComponent(entity, world));
-	this->registry->Register(entity);
-
-	/*
-	entity = new Entity(this, "ball#2");
-	entity->AddComponent(new PositionComponent(entity, tPosition{winWidth - winHeight/2.0f, winHeight - winWidth/2.0f}, screenBoundary));
-	entity->AddComponent(new ShapeComponent(entity, tDimensions{15.0f, 15.0f}));
-	entity->AddComponent(new PhysicsComponent(entity));
-	this->registry->Register(entity);
-    */
 	
-	const float wallThickness = 10.0f;
+	Entity *entity;
+	b2Body *body;
+	
+	tBoundary lPaddleBoundary = {10, 20, 50, winHeight-20};
+	entity = new Entity(this, "lPaddle");
+	entity->AddComponent(new ControllerComponent(entity, 200.0f, tController{SDL_SCANCODE_W, SDL_SCANCODE_S, SDL_SCANCODE_A, SDL_SCANCODE_D}));
+	body = mkPaddle(10.0f+paddleW/2.0f, winWidth/2.0f);
+	entity->AddComponent(new PhysicalComponent(entity, world, body, lPaddleBoundary));
+	this->registry->Register(entity);
 
+	tBoundary rPaddleBoundary = {winWidth-50, 20, winWidth-10, winHeight-20};
+	entity = new Entity(this, "rPaddle");
+	entity->AddComponent(new ControllerComponent(entity, 200.0f, tController{SDL_SCANCODE_I, SDL_SCANCODE_K}));
+	body = mkPaddle(winWidth - (10.0f + paddleW/2.0f), winHeight - winWidth/2.0f);
+	entity->AddComponent(new PhysicalComponent(entity, world, body, rPaddleBoundary));
+	this->registry->Register(entity);
+
+	tBoundary screenBoundary = {0, 0, winWidth, winHeight};
+	entity = new Entity(this, "ball");
+	body = mkBall(winHeight/2.0f, winWidth/3.0f);
+	entity->AddComponent(new PhysicalComponent(entity, world, body, screenBoundary));
+	this->registry->Register(entity);
+	
+	/*
+	const float wallThickness = 10.0f;
+	 
 	entity = new Entity(this, "wallTop");
 	entity->AddComponent(new PositionComponent(entity, world, tPosition{winWidth/2.0f, wallThickness/2.0f}, screenBoundary));
 	entity->AddComponent(new ShapeComponent(entity, tDimensions{winWidth/1.0f, wallThickness}));
@@ -99,6 +133,7 @@ bool Game::Initialize() {
 	entity->AddComponent(new PositionComponent(entity, world, tPosition{winWidth/2.0f, winHeight/2.0f}, screenBoundary));
 	entity->AddComponent(new ShapeComponent(entity, tDimensions{3.0f, winHeight/1.1f}));
 	this->registry->Register(entity);
+	*/
 	
 	return true;
 }

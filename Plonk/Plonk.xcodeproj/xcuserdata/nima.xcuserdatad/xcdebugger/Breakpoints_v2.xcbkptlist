@@ -3,4 +3,118 @@
    uuid = "8951EE66-0014-4A02-9C1F-4F1D03399893"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0F43E4A5-6A8F-47B8-B6CE-6193C5831FA5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Plonk/System.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "InputSystem::ProcessInput(state)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0F43E4A5-6A8F-47B8-B6CE-6193C5831FA5 - 52fce1e23d0ca2b7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "InputSystem::ProcessInput(unsigned char const*) const"
+                  moduleName = "Plonk"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nima/Devel/gameprogcpp/Plonk/Plonk/System.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "57"
+                  endingLineNumber = "57"
+                  offsetFromSymbolStart = "360">
+               </Location>
+               <Location
+                  uuid = "0F43E4A5-6A8F-47B8-B6CE-6193C5831FA5 - 52fce1e23d0ca34a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "InputSystem::ProcessInput(unsigned char const*) const"
+                  moduleName = "Plonk"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nima/Devel/gameprogcpp/Plonk/Plonk/System.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "60"
+                  endingLineNumber = "60"
+                  offsetFromSymbolStart = "416">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2C22A966-C841-453B-8BEE-DAB2072A90CF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Plonk/System.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
+            landmarkName = "PhysicsSystem::UpdateGame(dt)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2C22A966-C841-453B-8BEE-DAB2072A90CF - b0d41ee6070fa6c0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PhysicsSystem::UpdateGame(float)"
+                  moduleName = "Plonk"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nima/Devel/gameprogcpp/Plonk/Plonk/System.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "147"
+                  endingLineNumber = "147"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  uuid = "2C22A966-C841-453B-8BEE-DAB2072A90CF - b0d41ee6070fa6c0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PhysicsSystem::UpdateGame(float)"
+                  moduleName = "Plonk"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nima/Devel/gameprogcpp/Plonk/Plonk/System.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "147"
+                  endingLineNumber = "147"
+                  offsetFromSymbolStart = "88">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AB7275B1-69C6-428D-B95E-CE41C0E16BBB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Plonk/System.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
+            landmarkName = "PhysicsSystem::UpdateGame(dt)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
